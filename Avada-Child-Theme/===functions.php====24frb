@@ -1,0 +1,81 @@
+<?php
+
+function theme_enqueue_styles() {
+    wp_enqueue_style( 'child-style', get_stylesheet_directory_uri() . '/style.css', array( 'avada-stylesheet' ) );
+}
+add_action( 'wp_enqueue_scripts', 'theme_enqueue_styles' );
+
+function avada_lang_setup() {
+	$lang = get_stylesheet_directory() . '/languages';
+	load_child_theme_textdomain( 'Avada', $lang );
+}
+add_action( 'after_setup_theme', 'avada_lang_setup' );
+
+//filter for urls
+add_filter( 'gform_pre_send_email', 'check_before_email' );
+function check_before_email( $email ) {
+$frmdata=$email['message'];
+if ($frmdata)
+    {
+        $field_value = $frmdata;
+        $pattern = '(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})';
+        
+        if (preg_match_all($pattern, $field_value))
+        {
+             $email['abort_email'] = true;
+             return $email;
+        }           
+    }  
+ }
+
+add_filter( 'gform_confirmation', 'custom_confirmation', 10, 4 );
+function custom_confirmation( $confirmation, $form, $entry, $ajax ) {
+    $field_value='';
+    $field_value = rgar( $entry, '4' ).' '.rgar( $entry, '5' ).' '.rgar( $entry, '9' );
+    $pattern = '(https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})';
+    if (preg_match_all($pattern, $field_value))
+    {
+        $redirectURL="/thank-you-two/";
+        $confirmation = array( 'redirect' => $redirectURL );
+                
+    }
+    return $confirmation;
+}
+
+// CaseResults Shortcode
+function caseresult_func() {?>
+<div class="fusion-text caser-results-wrapper">
+    <div class="row">
+        <div class="subheading"></div>
+        <div class="col-lg-4 col-md-4 col-sm-4 cr-inner cr-box">
+            <div id="parent"><h2 class="heading">Guardian Hospice (N.D. Ga.)</h2>
+                <div class="case-divider"></div>
+                <p class="case-excerpt">'</p>
+                <div id="hover-content"><div class="cr-content"></div><a href="" class="default-btn-shortcode dt-btn dt-btn-m ico-right-side" style="margin:0 auto;"><span>Read More</span>
+                    <i class="fas fa-long-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 cr-inner cr-box">
+            <div id="parent"><h2 class="heading">Guardian Hospice (N.D. Ga.)</h2>
+                <div class="case-divider"></div>
+                <p class="case-excerpt">'</p>
+                <div id="hover-content"><div class="cr-content"></div><a href="" class="default-btn-shortcode dt-btn dt-btn-m ico-right-side" style="margin:0 auto;"><span>Read More</span>
+                    <i class="fas fa-long-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4 cr-inner cr-box">
+            <div id="parent"><h2 class="heading">Guardian Hospice (N.D. Ga.)</h2>
+                <div class="case-divider"></div>
+                <p class="case-excerpt">'</p>
+                <div id="hover-content"><div class="cr-content"></div><a href="" class="default-btn-shortcode dt-btn dt-btn-m ico-right-side" style="margin:0 auto;"><span>Read More</span>
+                    <i class="fas fa-long-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ <?php return $output;
+}
+add_shortcode('CaseResult', 'caseresult_func');
