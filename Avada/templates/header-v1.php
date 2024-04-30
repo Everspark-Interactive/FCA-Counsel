@@ -21,6 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="fusion-header-has-flyout-menu-content">
 		<?php endif; ?>
 		<?php avada_logo(); ?>
+		<div class="phone-number-mobile"><a href="tel:7709885035">770-988-5035</a>	</div>
 		<?php avada_main_menu(); ?>
 		<?php avada_mobile_menu_search(); ?>
 		<?php if ( 'flyout' === Avada()->settings->get( 'mobile_menu_design' ) ) : ?>
